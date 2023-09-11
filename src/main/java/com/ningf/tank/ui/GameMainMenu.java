@@ -9,12 +9,10 @@ import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.DialogService;
 import com.ningf.tank.ProjectVar;
 import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.TilePane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -26,7 +24,6 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 import static javafx.scene.input.KeyCode.*;
 
 /**
- * @author LeeWyatt
  * 游戏的主菜单场景
  */
 public class GameMainMenu extends FXGLMenu {
@@ -49,30 +46,31 @@ public class GameMainMenu extends FXGLMenu {
         MainMenuButton standAloneGameBtn = new MainMenuButton("StandAlone Game", ()->{
 
 
-            Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("选择游戏模式");
-            alert.setHeaderText("选择游戏模式");
 
-            ButtonType singlePlayer = new ButtonType("单人游戏");
-            ButtonType doublePlayer = new ButtonType("双人游戏");
-            ButtonType cancelBtn=new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-            alert.getButtonTypes().setAll(singlePlayer,doublePlayer,cancelBtn);
-            Optional<ButtonType> result=alert.showAndWait();
-            if(result.get()==singlePlayer){
+            DialogService dialogService=getDialogService();
+            //设置按钮
+            Button singlePlayer=getUIFactoryService().newButton("1Player");
+            Button doublePlayer=getUIFactoryService().newButton("2Player");
+            Button cancelBtn=getUIFactoryService().newButton("Cancel");
+            //设置按钮事件
+            singlePlayer.addEventFilter(ActionEvent.ACTION, event -> {
                 ProjectVar.playerAmount = 1;
                 ProjectVar.isOnlineGame = false;
                 FXGL.getGameController().startNewGame();
-            }
-            else if (result.get()==doublePlayer) {
+            });
+            doublePlayer.addEventFilter(ActionEvent.ACTION,event -> {
                 ProjectVar.playerAmount = 2;
                 ProjectVar.isOnlineGame = false;
                 FXGL.getGameController().startNewGame();
-
-            }
-            else{
-                alert.close();
-            }
-            //else (result.get()==) 关闭窗口事件
+            });
+            cancelBtn.addEventFilter(ActionEvent.ACTION,event -> {
+                getGameController().gotoMainMenu();
+            });
+            //设置布局放入三个按钮
+            HBox hb=new HBox();
+            hb.getChildren().addAll(singlePlayer,doublePlayer,cancelBtn);
+            //展示布局
+            dialogService.showBox("选择游戏模式",hb);
 
         });
 

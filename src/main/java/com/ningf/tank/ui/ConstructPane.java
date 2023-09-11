@@ -24,7 +24,6 @@ import java.util.Locale;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 /**
- * @author LeeWyatt
  * 自定义创建地图的场景
  */
 public class ConstructPane extends BorderPane {

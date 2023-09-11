@@ -3,7 +3,6 @@ package com.ningf.tank;
 import java.io.Serializable;
 
 /**
- * @author LeeWyatt
  */
 public enum GameType implements Serializable {
     /**

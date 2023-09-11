@@ -112,3 +112,10 @@
 #btn-start:hover Region {
     -fx-background-color: #ff0000;
 }
+
+/*----------GreatHallPane---------*/
+.pane-greathall {
+    -fx-background-image: url("assets/textures/ui/GreatHallPaneBg1.jpg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+}

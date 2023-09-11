@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 /**
- * @author LeeWyatt
  * 游戏加载场景
  */
 public class GameLoadingScene extends LoadingScene {
