@@ -1,7 +1,6 @@
 package com.ningf.tank;
 
 /**
- * @author LeeWyatt
  */
 public enum ItemType {
     /**

@@ -5,7 +5,6 @@ import com.almasb.fxgl.dsl.FXGL;
 import javafx.util.Duration;
 
 /**
- * @author LeeWyatt
  */
 public class GameConfig {
 

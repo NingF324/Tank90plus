@@ -5,7 +5,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
 /**
- * @author LeeWyatt
  * 游戏启动的场景
  */
 public class GameStartupScene extends StartupScene {

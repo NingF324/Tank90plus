@@ -8,7 +8,6 @@ import static com.almasb.fxgl.dsl.FXGL.play;
 import static com.almasb.fxgl.dsl.FXGL.texture;
 
 /**
- * @author LeeWyatt
  * 主菜单的单选按钮
  */
 public class MainMenuButton extends RadioButton {

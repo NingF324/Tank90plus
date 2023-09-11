@@ -14,7 +14,6 @@ import javafx.scene.text.Text;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 /**
- * @author LeeWyatt
  * 游戏右侧,显示敌人坦克数量,子弹等级的信息界面
  *    有空修改成单例类,感觉更好;
  */

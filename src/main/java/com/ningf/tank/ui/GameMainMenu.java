@@ -24,7 +24,6 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 import static javafx.scene.input.KeyCode.*;
 
 /**
- * @author LeeWyatt
  * 游戏的主菜单场景
  */
 public class GameMainMenu extends FXGLMenu {

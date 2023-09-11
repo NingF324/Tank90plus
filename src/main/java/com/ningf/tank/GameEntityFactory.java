@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author LeeWyatt
  * 产生实体的工具类
  */
 public class GameEntityFactory implements EntityFactory {

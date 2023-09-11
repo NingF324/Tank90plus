@@ -47,7 +47,6 @@ import java.util.concurrent.Executors;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 /**
- * @author LeeWyatt
  */
 public class TankApp extends GameApplication {
 
