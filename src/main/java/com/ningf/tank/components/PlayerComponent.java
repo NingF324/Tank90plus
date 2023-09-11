@@ -11,6 +11,7 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.BoundingBoxComponent;
 import com.almasb.fxgl.time.LocalTimer;
 import com.ningf.tank.GameConfig;
+import com.ningf.tank.ProjectVar;
 import com.ningf.tank.effects.ShipEffect;
 import com.ningf.tank.GameType;
 
@@ -34,6 +35,7 @@ public class PlayerComponent extends Component {
     private LazyValue<EntityGroup> blocksAll = new LazyValue<>(() -> entity.getWorld().getGroup(GameType.BRICK, GameType.FLAG, GameType.SEA, GameType.STONE, GameType.ENEMY, GameType.BORDER_WALL));
     private LazyValue<EntityGroup> blocks = new LazyValue<>(() -> entity.getWorld().getGroup(GameType.BRICK, GameType.FLAG, GameType.STONE, GameType.ENEMY, GameType.BORDER_WALL));
     private LocalTimer shootTimer = FXGL.newLocalTimer();
+    private LocalTimer moveTimer  = FXGL.newLocalTimer();
     private Dir moveDir = Dir.UP;
 
     @Override
@@ -43,6 +45,9 @@ public class PlayerComponent extends Component {
     }
 
     public void right() {
+        if (!moveTimer.elapsed(GameConfig.PLAYER_MOVE_DELAY)) {
+            return;
+        }
         if (movedThisFrame) {
             return;
         }
@@ -53,6 +58,9 @@ public class PlayerComponent extends Component {
     }
 
     public void left() {
+        if (!moveTimer.elapsed(GameConfig.PLAYER_MOVE_DELAY)) {
+            return;
+        }
         if (movedThisFrame) {
             return;
         }
@@ -64,6 +72,9 @@ public class PlayerComponent extends Component {
     }
 
     public void down() {
+        if (!moveTimer.elapsed(GameConfig.PLAYER_MOVE_DELAY)) {
+            return;
+        }
         if (movedThisFrame) {
             return;
         }
@@ -74,6 +85,9 @@ public class PlayerComponent extends Component {
     }
 
     public void up() {
+        if (!moveTimer.elapsed(GameConfig.PLAYER_MOVE_DELAY)) {
+            return;
+        }
         if (movedThisFrame) {
             return;
         }
@@ -96,7 +110,7 @@ public class PlayerComponent extends Component {
         } else {
             blockList = blocksAll.get().getEntitiesCopy();
         }
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i+=1) {
             entity.translate(velocity.x, velocity.y);
             boolean collision = false;
             for (int j = 0; j < blockList.size(); j++) {

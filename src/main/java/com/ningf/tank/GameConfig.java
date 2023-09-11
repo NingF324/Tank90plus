@@ -45,6 +45,8 @@ public class GameConfig {
      * 玩家射击间隔
      */
     public static final Duration PLAYER_SHOOT_DELAY = Duration.seconds(map.getDouble("playerShootDelay"));
+
+    public static final Duration PLAYER_MOVE_DELAY = Duration.seconds(map.getDouble("playerMoveDelay"));
     /**
      * 敌人射击间隔
      */
@@ -88,7 +90,8 @@ public class GameConfig {
      * 玩家移动速度
      */
     public static final int PLAYER_SPEED = map.getInt("playerSpeed");
-    /**
+    public static final int PLAYER_ONLINE_SPEED = map.getInt("playerOnlineSpeed");
+    /** = FXGL.newLocalTimer();
      * 敌人的移动速度
      */
     public static final int ENEMY_SPEED = map.getInt("enemySpeed");
