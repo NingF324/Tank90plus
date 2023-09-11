@@ -6,6 +6,7 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.*;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.core.util.LazyValue;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.EffectComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
@@ -100,6 +101,7 @@ public class TankApp extends GameApplication {
         settings.setGameMenuEnabled(true);
         settings.getCSSList().add("tankApp.css");
         settings.setDefaultCursor(new CursorInfo("ui/cursor.png", 0, 0));
+
         //FPS,CPU,RAM等信息的显示
         //settings.setProfilingEnabled(true);
         //开发模式.这样可以输出较多的日志异常追踪
@@ -442,7 +444,7 @@ public class TankApp extends GameApplication {
                 }else if (isRight==true) {
                     playerComponent2.right();
                 }
-                Thread.sleep(5); // 休眠5毫秒，然后继续检查新消息
+
 
             }
         }else {
@@ -482,7 +484,7 @@ public class TankApp extends GameApplication {
                 }else if (isRight==true) {
                     playerComponent.right();
                 }
-                Thread.sleep(5); // 休眠5毫秒，然后继续检查新消息
+
             }
         }
 
@@ -673,13 +675,15 @@ public class TankApp extends GameApplication {
         player = null;
         player = spawn("player", 9 * 24 + 3, 25 * 24);
         //每局开始玩家坦克都有无敌保护时间
-        player.getComponent(EffectComponent.class).startEffect(new HelmetEffect());
+
         playerComponent = player.getComponent(PlayerComponent.class);
+
 
         player2 = null;
         player2 = spawn("player", 9 * 24 + 3, 8 * 24);
         //每局开始玩家坦克都有无敌保护时间
-        player2.getComponent(EffectComponent.class).startEffect(new HelmetEffect());
+
+        player2.getViewComponent().addChild(FXGL.texture("tank/H2U.png"));
         playerComponent2 = player2.getComponent(PlayerComponent.class);
 
         //显示信息的UI
