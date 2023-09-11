@@ -252,7 +252,6 @@ public class TankApp extends GameApplication {
                         throw new RuntimeException(e);
                     }
                 });
-
                 networkThread.start();
             }
         });
@@ -261,6 +260,7 @@ public class TankApp extends GameApplication {
         onKey(KeyCode.DOWN, this::moveDownAction2);
         onKey(KeyCode.LEFT, this::moveLeftAction2);
         onKey(KeyCode.RIGHT, this::moveRightAction2);
+        onKey(KeyCode.ENTER, this::shootAction2);
         onKey(KeyCode.NUMPAD0, this::shootAction2);
         //player2攻击键选哪一个合适？
     }
