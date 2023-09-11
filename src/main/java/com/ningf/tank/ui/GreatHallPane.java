@@ -16,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -243,18 +244,32 @@ public class GreatHallPane extends SplitPane {
         });
 
 
+
+
         /**
          * 垂直布局，管理右侧区域
          */
         VBox vBox=new VBox(btnBack,btnEnterRoom,btnCreateRoom);
         vBox.setSpacing(30);
         vBox.setAlignment(Pos.BASELINE_CENTER);
-        AnchorPane rightAnchorPane = new AnchorPane(vBox);
-        
+
+
+        Label label=new Label();
+        Image image = new Image("assets/textures/ui/fxgl.png");
+        ImageView imageView = new ImageView(image);
+        label.setGraphic(imageView);
+        label.setRotate(90);
+        label.setLayoutY(400);
+        AnchorPane rightAnchorPane = new AnchorPane(vBox,label);
+
+
+
+
+
         //设置分割线，放入左右块
         this.setDividerPosition(0,scrollPane.getWidth());
         this.getItems().setAll(leftAnchorPane,rightAnchorPane);
-        this.setStyle("-fx-background-color: #7c7c7c");
+        this.setStyle("-fx-background-color: black");
 
 
     }

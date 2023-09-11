@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -38,12 +39,12 @@ public class LoginInPane extends Pane {
         passwordLabel.setStyle("-fx-text-fill: #B9340D");
         //设置用户名和密码输入框
         TextField usernameText=new TextField();
-        TextField passwordText=new TextField();
+        PasswordField passwordText=new PasswordField();
         usernameText.setMinSize(350,45);
         passwordText.setMinSize(350,45);
         //设置输入框透明
-        usernameText.setOpacity(0.2);
-        passwordText.setOpacity(0.2);
+        usernameText.setOpacity(0.4);
+        passwordText.setOpacity(0.4);
         //设置两个水平排列
         HBox hb1=new HBox();
         HBox hb2=new HBox();
@@ -139,12 +140,20 @@ public class LoginInPane extends Pane {
         exitBtn.addEventFilter(ActionEvent.ACTION,event -> {
                 getGameController().gotoMainMenu();
         });
+
+        Label label=new Label();
+        Image image = new Image("assets/textures/ui/logo.png");
+        ImageView imageView = new ImageView(image);
+        label.setGraphic(imageView);
+        label.setLayoutX(150);
+        label.setLayoutY(180);
+        label.setAlignment(Pos.BASELINE_CENTER);
         //放入排列
         pane.getChildren().addAll(hb1,hb2,hb3);
         pane.setSpacing(40);
         pane.setLayoutX(80);
         pane.setLayoutY(400);
-        this.getChildren().addAll(pane);
+        this.getChildren().addAll(label,pane);
     }
     private void registerWindow() throws ClassNotFoundException, SQLException {
         DialogService registerDialogService=getDialogService();
@@ -166,8 +175,8 @@ public class LoginInPane extends Pane {
         usernameText1.setMinWidth(280);
         passwordText1.setMinWidth(280);
         //设置输入框透明
-        usernameText1.setOpacity(0.2);
-        passwordText1.setOpacity(0.2);
+        usernameText1.setOpacity(0.4);
+        passwordText1.setOpacity(0.4);
         //设置两个水平排列
         HBox hb11=new HBox();
         HBox hb22=new HBox();
