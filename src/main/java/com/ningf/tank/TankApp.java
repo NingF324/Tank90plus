@@ -50,9 +50,9 @@ import static com.almasb.fxgl.dsl.FXGL.*;
  */
 public class TankApp extends GameApplication {
 
-    private Entity player;
+    public static Entity player;
 
-    private Entity player2;
+    public static Entity player2;
     private PlayerComponent playerComponent;
     private PlayerComponent playerComponent2;
 

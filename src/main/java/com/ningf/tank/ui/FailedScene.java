@@ -6,6 +6,8 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.texture.Texture;
 import com.ningf.tank.GameType;
+import com.ningf.tank.ProjectVar;
+import com.ningf.tank.TankApp;
 import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
 
@@ -19,8 +21,26 @@ public class FailedScene extends SubScene {
 
     private final TranslateTransition tt;
 
+    private Texture gameOverTexture;
+
     public FailedScene() {
-        Texture gameOverTexture = texture("ui/GameOver.png");
+        if(ProjectVar.isOnlineGame){
+            if(ProjectVar.isServer){
+                if(ProjectVar.diedPlayer.equals(TankApp.player)){
+                    gameOverTexture = texture("ui/GameOver.png");
+                }else {
+                    gameOverTexture = texture("ui/YouWin.png");
+                }
+            } else {
+                if(ProjectVar.diedPlayer.equals(TankApp.player)){
+                    gameOverTexture = texture("ui/YouWin.png");
+                }else {
+                    gameOverTexture = texture("ui/GameOver.png");
+                }
+            }
+        }else {
+            gameOverTexture = texture("ui/GameOver.png");
+        }
         gameOverTexture.setScaleX(2);
         gameOverTexture.setScaleY(2);
         gameOverTexture.setTranslateY(getAppHeight() - gameOverTexture.getHeight() + 24);

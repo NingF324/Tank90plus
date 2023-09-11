@@ -5,6 +5,7 @@ import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.ningf.tank.GameType;
+import com.ningf.tank.ProjectVar;
 import com.ningf.tank.TankApp;
 import com.ningf.tank.effects.HelmetEffect;
 import com.ningf.tank.components.OwnerComponent;
@@ -37,6 +38,7 @@ public class BulletPlayerHandler extends CollisionHandler {
         hp.damage(1);
         TankApp tankApp = getAppCast();
         if (hp.isZero()) {
+            ProjectVar.diedPlayer=player;
             if (!getb("gameOver")) {
                 player.removeFromWorld();
                 set("gameOver", true);
