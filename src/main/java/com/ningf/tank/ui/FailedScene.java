@@ -20,7 +20,6 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class FailedScene extends SubScene {
 
     private final TranslateTransition tt;
-
     private Texture gameOverTexture;
 
     public FailedScene() {

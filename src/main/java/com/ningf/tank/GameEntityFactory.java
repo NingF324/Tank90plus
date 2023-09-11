@@ -16,12 +16,12 @@ import com.almasb.fxgl.texture.AnimationChannel;
 import com.almasb.fxgl.ui.ProgressBar;
 import com.ningf.tank.components.EnemyComponent;
 import com.ningf.tank.components.FlagViewComponent;
+import com.ningf.tank.components.OwnerComponent;
 import com.ningf.tank.components.PlayerComponent;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import com.ningf.tank.components.OwnerComponent;
 
 import java.util.ArrayList;
 import java.util.List;
