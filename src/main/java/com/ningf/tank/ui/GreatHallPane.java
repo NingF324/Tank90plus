@@ -8,11 +8,14 @@ import com.ningf.tank.TankApp;
 import com.ningf.tank.helpers.Room;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -24,7 +27,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.function.Consumer;
 
-import static com.almasb.fxgl.dsl.FXGL.getGameController;
+import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppHeight;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
 
@@ -33,7 +36,7 @@ public class GreatHallPane extends SplitPane {
     //数据集
     //private final ObservableList<Room> rooms;
 
-    private TextField room_name_field=new TextField();
+    //private TextField room_name_field=new TextField();
 
     private Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
@@ -57,9 +60,11 @@ public class GreatHallPane extends SplitPane {
         //产生表视图对象
         TableView<Room> tableView=new TableView<>();
         tableView.setMinHeight(2*FXGL.getAppHeight());
+        //tableView.setStyle("-fx-font-style:");
 
         //设置表视图是否编辑
         tableView.setEditable(true);
+
 
         //设计表中的列字段
         TableColumn room_id=new TableColumn("房间号");
@@ -94,6 +99,7 @@ public class GreatHallPane extends SplitPane {
         //创建一个ScrollPane,把tableview放进去
         ScrollPane scrollPane = new ScrollPane(tableView);
         scrollPane.setPrefHeight(FXGL.getAppHeight());
+        scrollPane.setStyle("-fx-background-color: black");
 
         //创建左侧AnchorPane
         AnchorPane leftAnchorPane = new AnchorPane(scrollPane);
@@ -102,7 +108,7 @@ public class GreatHallPane extends SplitPane {
         //分割线，上面是tableview部分
 
         //退出按钮，返回主菜单
-        Button btnBack = new Button("Back to Menu");
+        Button btnBack = getUIFactoryService().newButton("返回主菜单");
         btnBack.setGraphic(new Region());
         btnBack.setId("btn-back");
         btnBack.setOnAction(event -> {
@@ -116,40 +122,46 @@ public class GreatHallPane extends SplitPane {
          * 在数据库更新房间状态(状态改为gaming)
          */
         
-        Button btnEnterRoom = new Button("进入房间");
+        Button btnEnterRoom = getUIFactoryService().newButton("进入房间");
         btnEnterRoom.setGraphic(new Region());
         btnEnterRoom.setLayoutX(650);
         btnEnterRoom.setId("btn-EnterRoom");
+
+        //获取所选行
+        //int moveIndex = tableView.getSelectionModel().getFocusedIndex();
+        int focusedIndex = tableView.getSelectionModel().getFocusedIndex();
+
+
+
         btnEnterRoom.setOnAction(event -> {
-
-            //获取所选行
-            //int moveIndex = tableView.getSelectionModel().getFocusedIndex();
-
-            int focusedIndex = tableView.getSelectionModel().getFocusedIndex();
-
             TableView.TableViewSelectionModel<Room> selectionModel = tableView.getSelectionModel();
             Room selectedRoom = selectionModel.getSelectedItem();
-            System.out.println(selectedRoom.getRoom_status());
+            //System.out.println(selectedRoom.getRoom_status());
 
-            if(selectedRoom.getRoom_status().equals("gaming")){
-                Alert alert1 = new Alert(Alert.AlertType.ERROR);
-                alert1.setHeaderText("进入失败");
-                alert1.setContentText("该房间正在游戏中，请选择其他房间");
-                alert1.show();
+            if(selectedRoom==null){
+                return;
+            } else {
+                if(selectedRoom.getRoom_status().equals("gaming")){
+                    Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                    alert1.setHeaderText("进入失败");
+                    alert1.setContentText("该房间正在游戏中，请选择其他房间");
+                    alert1.show();
+                }
+                else {
+                    ProjectVar.selectedRoomIp=selectedRoom.getRoom_ip();
+                    ProjectVar.selectedRoomPort=selectedRoom.getRoom_port();
+
+                    //输入房间的IP和端口，开始游戏
+
+                    ProjectVar.playerAmount=2;
+                    ProjectVar.isOnlineGame=true;
+                    ProjectVar.isServer=false;
+                    FXGL.getGameController().startNewGame();
+
+                    selectedRoom.setRoom_status("gaming");
+                }
             }
-            else {
-                ProjectVar.selectedRoomIp=selectedRoom.getRoom_ip();
-                ProjectVar.selectedRoomPort=selectedRoom.getRoom_port();
 
-                //输入房间的IP和端口，开始游戏
-
-                ProjectVar.playerAmount=2;
-                ProjectVar.isOnlineGame=true;
-                ProjectVar.isServer=false;
-                FXGL.getGameController().startNewGame();
-
-                selectedRoom.setRoom_status("gaming");
-            }
             System.out.println(focusedIndex);
 
         });
@@ -165,7 +177,7 @@ public class GreatHallPane extends SplitPane {
          * 强制规定每个房间的端口都是9090
          * 自动在数据库添加房主的id
          */
-        Button btnCreateRoom = new Button("创建房间");
+        Button btnCreateRoom = getUIFactoryService().newButton("创建房间");
         btnCreateRoom.setGraphic(new Region());
         btnCreateRoom.setId("btn-CreateRoom");
         btnCreateRoom.setOnAction(event -> {
@@ -188,10 +200,25 @@ public class GreatHallPane extends SplitPane {
             String roomDescription = textInputDialog.getResult();
 
 
+            DialogPane dialogPane = textInputDialog.getDialogPane();
+            Button cancelButton = (Button) dialogPane.lookupButton(ButtonType.CANCEL);
+            cancelButton.setOnAction(e -> {
+                textInputDialog.close();
+                getGameController().exit();
+                System.out.println("Cancel button clicked");
+                // 执行取消操作的代码
+            });
+
+//            Button okButton=(Button) dialogPane.lookupButton(ButtonType.OK);
+//            okButton.setOnAction(e->{
+//
+//
+//            });
+
             if (isRoomExist(hostAddress)) {
                 Alert alert1 = new Alert(Alert.AlertType.ERROR);
                 alert1.setHeaderText("创建失败");
-                alert1.setContentText("您已创建过房间，请等待其他玩家进入");
+                alert1.setContentText("大厅已经有您创建的房间了，请等待其他玩家进入");
                 alert1.show();
                 System.out.println("您已创建过房间，请等待其他玩家进入");
             }
@@ -202,18 +229,15 @@ public class GreatHallPane extends SplitPane {
 
                 Alert alert2 = new Alert(Alert.AlertType.ERROR);
                 alert2.setHeaderText("创建成功");
-                alert2.setContentText("您已创建过房间，请等待其他玩家进入");
+                alert2.setContentText("房间创建成功，请等待其他玩家进入");
                 alert2.show();
                 System.out.println("创建房间成功");
+
+                ProjectVar.playerAmount=2;
+                ProjectVar.isOnlineGame=true;
+                ProjectVar.isServer=true;
+                FXGL.getGameController().startNewGame();
             }
-
-            ProjectVar.playerAmount=2;
-            ProjectVar.isOnlineGame=true;
-            ProjectVar.isServer=true;
-            FXGL.getGameController().startNewGame();
-
-
-
 
 
         });
@@ -222,12 +246,15 @@ public class GreatHallPane extends SplitPane {
         /**
          * 垂直布局，管理右侧区域
          */
-        VBox vBox=new VBox(btnBack,btnEnterRoom,btnCreateRoom,room_name_field);
+        VBox vBox=new VBox(btnBack,btnEnterRoom,btnCreateRoom);
+        vBox.setSpacing(30);
+        vBox.setAlignment(Pos.BASELINE_CENTER);
         AnchorPane rightAnchorPane = new AnchorPane(vBox);
         
         //设置分割线，放入左右块
         this.setDividerPosition(0,scrollPane.getWidth());
         this.getItems().setAll(leftAnchorPane,rightAnchorPane);
+        this.setStyle("-fx-background-color: #7c7c7c");
 
 
     }
