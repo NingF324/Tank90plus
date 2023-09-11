@@ -633,7 +633,7 @@ public class TankApp extends GameApplication {
         playerComponent = player.getComponent(PlayerComponent.class);
 
         if(ProjectVar.playerAmount==2) {
-            System.out.println("two game start");
+            System.out.println("two player game start");
             player2 = spawn("player", 17 * 24 + 3, 25 * 24);
             player2.getComponent(EffectComponent.class).startEffect(new HelmetEffect());
             playerComponent2 = player2.getComponent(PlayerComponent.class);
