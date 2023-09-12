@@ -252,7 +252,6 @@ public class TankApp extends GameApplication {
                         throw new RuntimeException(e);
                     }
                 });
-
                 networkThread.start();
             }
         });
@@ -261,10 +260,9 @@ public class TankApp extends GameApplication {
         onKey(KeyCode.DOWN, this::moveDownAction2);
         onKey(KeyCode.LEFT, this::moveLeftAction2);
         onKey(KeyCode.RIGHT, this::moveRightAction2);
+        onKey(KeyCode.ENTER, this::shootAction2);
         onKey(KeyCode.NUMPAD0, this::shootAction2);
-
         //player2攻击键选哪一个合适？
-        onKey(KeyCode.F, this::shootAction2);
     }
 
     private boolean tankIsReady() {
@@ -290,6 +288,7 @@ public class TankApp extends GameApplication {
             }
         }else {
             if (tankIsReady()) {
+                //System.out.println("shoot");
                 playerComponent.shoot();
             }
         }
@@ -310,6 +309,7 @@ public class TankApp extends GameApplication {
             }
         }else {
             if (tankIsReady()) {
+                //System.out.println("right");
                 playerComponent.right();
             }
         }
@@ -350,6 +350,7 @@ public class TankApp extends GameApplication {
             }
         }else {
             if (tankIsReady()) {
+                //System.out.println("down");
                 playerComponent.down();
             }
         }
@@ -370,6 +371,7 @@ public class TankApp extends GameApplication {
             }
         }else {
             if (tankIsReady()) {
+                //System.out.println("up");
                 playerComponent.up();
             }
         }
@@ -415,8 +417,6 @@ public class TankApp extends GameApplication {
                 jsonStr=reader.readLine();
                 System.out.println("成功读取");
                 JSONObject jsonObject=new JSONObject(jsonStr);
-
-
 
                 //对接收到的信息进行处理
                 int playerNumber=jsonObject.getInt("playerNumber");
@@ -608,6 +608,7 @@ public class TankApp extends GameApplication {
         set("destroyedEnemy", 0);
         //恢复生成敌军的数量
         set("spawnedEnemy", 0);
+        set("liveNum",ProjectVar.playerAmount);
 
         expireAction(freezingTimerAction);
         expireAction(spadeTimerAction);
@@ -632,10 +633,11 @@ public class TankApp extends GameApplication {
         playerComponent = player.getComponent(PlayerComponent.class);
 
         if(ProjectVar.playerAmount==2) {
-            System.out.println("two game start");
+            System.out.println("two player game start");
             player2 = spawn("player", 17 * 24 + 3, 25 * 24);
             player2.getComponent(EffectComponent.class).startEffect(new HelmetEffect());
             playerComponent2 = player2.getComponent(PlayerComponent.class);
+            player2.getViewComponent().addChild(FXGL.texture("tank/H2U.png"));
         }else{
             System.out.println("single game start");
         }
@@ -664,6 +666,7 @@ public class TankApp extends GameApplication {
         set("destroyedEnemy", 0);
         //恢复生成敌军的数量
         set("spawnedEnemy", 0);
+        set("liveNum",1);
 
         expireAction(freezingTimerAction);
         expireAction(spadeTimerAction);
@@ -672,22 +675,22 @@ public class TankApp extends GameApplication {
         play("start.wav");
 
         player = null;
-        player = spawn("player", 9 * 24 + 3, 25 * 24);
+        player = spawn("player", 12 * 24 + 3, 20 * 24);
         //每局开始玩家坦克都有无敌保护时间
 
         playerComponent = player.getComponent(PlayerComponent.class);
 
 
         player2 = null;
-        player2 = spawn("player", 9 * 24 + 3, 8 * 24);
+        player2 = spawn("player", 12 * 24 + 3, 6 * 24);
+        playerComponent2 = player2.getComponent(PlayerComponent.class);
+        playerComponent2.getEntity().setRotation(180);
         //每局开始玩家坦克都有无敌保护时间
 
         player2.getViewComponent().addChild(FXGL.texture("tank/H2U.png"));
-        playerComponent2 = player2.getComponent(PlayerComponent.class);
 
         //显示信息的UI
         getGameScene().addGameView(new GameView(new InfoPane(), 100));
-
     }
 
     private void spawnEnemy() {
@@ -831,7 +834,7 @@ public class TankApp extends GameApplication {
             OutputStream outputStream = ProjectVar.client.getOutputStream();
             outputStream.write(jsonStr.getBytes(StandardCharsets.UTF_8));
         }
-        System.out.println("成功输出");
+        System.out.println("输出" + jsonStr);
     }
 
     public static void main(String[] args) {

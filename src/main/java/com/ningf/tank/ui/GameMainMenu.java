@@ -43,7 +43,7 @@ public class GameMainMenu extends FXGLMenu {
 
 
         //单人游戏
-        MainMenuButton standAloneGameBtn = new MainMenuButton("StandAlone Game", ()->{
+        MainMenuButton standAloneGameBtn = new MainMenuButton("Local Game", ()->{
 
 
 
@@ -75,7 +75,7 @@ public class GameMainMenu extends FXGLMenu {
         });
 
 //在线游戏
-        MainMenuButton networkPlayBtn = new MainMenuButton("NetworkPlay Game", () -> {
+        MainMenuButton networkPlayBtn = new MainMenuButton("Online Game", () -> {
             getContentRoot().getChildren().setAll(new LoginInPane());
         });
 
@@ -162,7 +162,7 @@ public class GameMainMenu extends FXGLMenu {
         tp1.setAlignment(Pos.CENTER_LEFT);
 
         pane.addRow(0, getUIFactoryService().newText("Movement"), tp1);
-        pane.addRow(1, getUIFactoryService().newText("Shoot"), new KeyView(F));
+        pane.addRow(1, getUIFactoryService().newText("Shoot"), new KeyView(SPACE));
         KeyView kvL = new KeyView(LEFT);
         kvL.setPrefWidth(38);
         TilePane tp2 = new TilePane(new KeyView(UP), new KeyView(DOWN), kvL, new KeyView(RIGHT));
@@ -170,7 +170,7 @@ public class GameMainMenu extends FXGLMenu {
         tp2.setHgap(2);
         tp2.setAlignment(Pos.CENTER_LEFT);
         pane.addRow(2, getUIFactoryService().newText("Movement"), tp2);
-        pane.addRow(3, getUIFactoryService().newText("Shoot"), new KeyView(SPACE));
+        pane.addRow(3, getUIFactoryService().newText("Shoot"), new KeyView(ENTER));
         DialogService dialogService = getDialogService();
         dialogService.showBox("Help", pane, getUIFactoryService().newButton("OK"));
     }

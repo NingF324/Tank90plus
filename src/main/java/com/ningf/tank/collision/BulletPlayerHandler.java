@@ -41,8 +41,11 @@ public class BulletPlayerHandler extends CollisionHandler {
             ProjectVar.diedPlayer=player;
             if (!getb("gameOver")) {
                 player.removeFromWorld();
-                set("gameOver", true);
-                getSceneService().pushSubScene(tankApp.failedSceneLazyValue.get());
+                inc("liveNum",-1);
+                if (geti("liveNum") == 0) {
+                    set("gameOver", true);
+                    getSceneService().pushSubScene(tankApp.failedSceneLazyValue.get());
+                }
             }
         }
     }

@@ -44,6 +44,8 @@ public class GreatHallPane extends SplitPane {
     //获取当前ip
     private InetAddress addr ;
 
+    private String hostAddress;
+
     //房主名字
     private String roomMasterName;
 
@@ -51,6 +53,17 @@ public class GreatHallPane extends SplitPane {
     private Scene creatRoomScene;
     public GreatHallPane(String UN) {
         setPrefSize(getAppWidth(), getAppHeight());//设置界面大小
+
+        /**
+         * 获取本机ip
+         */
+        try {
+            addr=InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        hostAddress = addr.getHostAddress();
+
         roomMasterName=UN;//房主名字，同时也是登陆的账号的名字
         initGreatHall();//初始化界面
 
@@ -140,26 +153,49 @@ public class GreatHallPane extends SplitPane {
             //System.out.println(selectedRoom.getRoom_status());
 
             if(selectedRoom==null){
+                Alert alert2=new Alert(Alert.AlertType.ERROR);
+                alert2.setHeaderText("错误");
+                alert2.setContentText("您未选择房间");
+                alert2.show();
                 return;
-            } else {
+            }
+            else {
                 if(selectedRoom.getRoom_status().equals("gaming")){
                     Alert alert1 = new Alert(Alert.AlertType.ERROR);
                     alert1.setHeaderText("进入失败");
                     alert1.setContentText("该房间正在游戏中，请选择其他房间");
                     alert1.show();
                 }
-                else {
-                    ProjectVar.selectedRoomIp=selectedRoom.getRoom_ip();
-                    ProjectVar.selectedRoomPort=selectedRoom.getRoom_port();
+                else if(selectedRoom.getRoom_ip().equals(hostAddress)){
+//                    ProjectVar.selectedRoomIp=selectedRoom.getRoom_ip();
+//                    ProjectVar.selectedRoomPort=selectedRoom.getRoom_port();
+
+                    Alert alert3 = new Alert(Alert.AlertType.ERROR);
+                    alert3.setHeaderText("进入成功");
+                    alert3.setContentText("请等待其他玩家进入");
+                    alert3.show();
+                    System.out.println("请等待其他玩家进入");
+
+                    ProjectVar.playerAmount=2;
+                    ProjectVar.isOnlineGame=true;
+                    ProjectVar.isServer=true;
+                    FXGL.getGameController().startNewGame();
+
+                    //createRoom(selectedRoom.getRoom_description(),ProjectVar.selectedRoomIp,ProjectVar.selectedRoomPort);
 
                     //输入房间的IP和端口，开始游戏
+
+
+
+                    selectedRoom.setRoom_status("gaming");
+                } else if (!selectedRoom.getRoom_ip().equals(hostAddress)) {
+                    ProjectVar.selectedRoomIp=selectedRoom.getRoom_ip();
+                    ProjectVar.selectedRoomPort=selectedRoom.getRoom_port();
 
                     ProjectVar.playerAmount=2;
                     ProjectVar.isOnlineGame=true;
                     ProjectVar.isServer=false;
                     FXGL.getGameController().startNewGame();
-
-                    selectedRoom.setRoom_status("gaming");
                 }
             }
 
@@ -186,12 +222,6 @@ public class GreatHallPane extends SplitPane {
             //获取当前玩家的id
             String roomMaster=roomMasterName;
 
-            try {
-                addr=InetAddress.getLocalHost();
-            } catch (UnknownHostException e) {
-                throw new RuntimeException(e);
-            }
-            String hostAddress = addr.getHostAddress();
             ProjectVar.createRoomIp=hostAddress;
 
             TextInputDialog textInputDialog=new TextInputDialog();
@@ -201,25 +231,10 @@ public class GreatHallPane extends SplitPane {
             String roomDescription = textInputDialog.getResult();
 
 
-            DialogPane dialogPane = textInputDialog.getDialogPane();
-            Button cancelButton = (Button) dialogPane.lookupButton(ButtonType.CANCEL);
-            cancelButton.setOnAction(e -> {
-                textInputDialog.close();
-                getGameController().exit();
-                System.out.println("Cancel button clicked");
-                // 执行取消操作的代码
-            });
-
-//            Button okButton=(Button) dialogPane.lookupButton(ButtonType.OK);
-//            okButton.setOnAction(e->{
-//
-//
-//            });
-
             if (isRoomExist(hostAddress)) {
                 Alert alert1 = new Alert(Alert.AlertType.ERROR);
                 alert1.setHeaderText("创建失败");
-                alert1.setContentText("大厅已经有您创建的房间了，请等待其他玩家进入");
+                alert1.setContentText("您已创建过房间，请等待其他玩家进入");
                 alert1.show();
                 System.out.println("您已创建过房间，请等待其他玩家进入");
             }
@@ -230,15 +245,16 @@ public class GreatHallPane extends SplitPane {
 
                 Alert alert2 = new Alert(Alert.AlertType.ERROR);
                 alert2.setHeaderText("创建成功");
-                alert2.setContentText("房间创建成功，请等待其他玩家进入");
+                alert2.setContentText("您已创建过房间，请等待其他玩家进入");
                 alert2.show();
                 System.out.println("创建房间成功");
-
-                ProjectVar.playerAmount=2;
-                ProjectVar.isOnlineGame=true;
-                ProjectVar.isServer=true;
-                FXGL.getGameController().startNewGame();
             }
+
+            ProjectVar.playerAmount=2;
+            ProjectVar.isOnlineGame=true;
+            ProjectVar.isServer=true;
+            FXGL.getGameController().startNewGame();
+
 
 
         });
