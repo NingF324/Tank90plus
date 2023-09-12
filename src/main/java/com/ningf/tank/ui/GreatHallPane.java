@@ -49,6 +49,8 @@ public class GreatHallPane extends SplitPane {
     //房主名字
     private String roomMasterName;
 
+    private int localRoomNum;
+
 
     private Scene creatRoomScene;
     public GreatHallPane(String UN) {
@@ -63,6 +65,7 @@ public class GreatHallPane extends SplitPane {
             throw new RuntimeException(e);
         }
         hostAddress = addr.getHostAddress();
+        localRoomNum=0;
 
         roomMasterName=UN;//房主名字，同时也是登陆的账号的名字
         initGreatHall();//初始化界面
@@ -170,16 +173,31 @@ public class GreatHallPane extends SplitPane {
 //                    ProjectVar.selectedRoomIp=selectedRoom.getRoom_ip();
 //                    ProjectVar.selectedRoomPort=selectedRoom.getRoom_port();
 
-                    Alert alert3 = new Alert(Alert.AlertType.ERROR);
-                    alert3.setHeaderText("进入成功");
-                    alert3.setContentText("请等待其他玩家进入");
-                    alert3.show();
-                    System.out.println("请等待其他玩家进入");
+                    if(localRoomNum==0){
+                        ProjectVar.selectedRoomIp=selectedRoom.getRoom_ip();
+                        ProjectVar.selectedRoomPort=selectedRoom.getRoom_port();
 
-                    ProjectVar.playerAmount=2;
-                    ProjectVar.isOnlineGame=true;
-                    ProjectVar.isServer=true;
-                    FXGL.getGameController().startNewGame();
+                        ProjectVar.playerAmount=2;
+                        ProjectVar.isOnlineGame=true;
+                        ProjectVar.isServer=false;
+                        FXGL.getGameController().startNewGame();
+                        localRoomNum = 2;
+                    }
+                    else {
+                        Alert alert3 = new Alert(Alert.AlertType.ERROR);
+                        alert3.setHeaderText("进入成功");
+                        alert3.setContentText("请等待其他玩家进入");
+                        alert3.show();
+                        System.out.println("请等待其他玩家进入");
+
+
+                        ProjectVar.playerAmount=2;
+                        ProjectVar.isOnlineGame=true;
+                        ProjectVar.isServer=true;
+                        FXGL.getGameController().startNewGame();
+                    }
+
+
 
                     //createRoom(selectedRoom.getRoom_description(),ProjectVar.selectedRoomIp,ProjectVar.selectedRoomPort);
 
@@ -232,6 +250,7 @@ public class GreatHallPane extends SplitPane {
 
 
             if (isRoomExist(hostAddress)) {
+                localRoomNum=1;
                 Alert alert1 = new Alert(Alert.AlertType.ERROR);
                 alert1.setHeaderText("创建失败");
                 alert1.setContentText("您已创建过房间，请等待其他玩家进入");
@@ -240,6 +259,7 @@ public class GreatHallPane extends SplitPane {
             }
             else {
                 createRoom(roomDescription,hostAddress,roomMaster);
+                localRoomNum=1;
 
                 getDataFromDB(tableView,room_id,room_description,room_status,room_ip,room_port,room_master);
 
